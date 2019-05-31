@@ -22,5 +22,11 @@
     "description": "Let's give Jeff a chance",
     "due_on": null,
     "status": "pending"
+  },
+  {
+    "task": "Do Python homework",
+    "description": null,
+    "due_on": "2019-05-31 00:00:00",
+    "status": "done"
   }
 ]

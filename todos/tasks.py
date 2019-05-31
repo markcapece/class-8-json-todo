@@ -24,8 +24,13 @@ def create_task(tasks, name, description=None, due_on=None):
 
 def list_tasks(tasks, status='all'):
     task_list = []
+
+    status_options = ['all', 'pending', 'done']
+    if status not in status_options:
+        raise InvalidTaskStatus
+
     for idx, task in enumerate(tasks, 1):
-        if task['due_on'] is not None:
+        if task['due_on']:
             due_on = task['due_on'].strftime('%Y-%m-%d %H:%M:%S')
         else:
             due_on = None
@@ -39,12 +44,19 @@ def list_tasks(tasks, status='all'):
 
 def complete_task(tasks, name):
     new_tasks = []
+    found_name = False
+    task_id = parse_int(name)
 
-    for task in tasks:
-        if name == task['task']:
+    for idx, task in enumerate(tasks, 1):
+        if name == task['task'] or task_id == idx:
+            if task['status'] == 'done':
+                raise TaskAlreadyDoneException
+            found_name = True
             task = task.copy()
             task['status'] = 'done'
         new_tasks.append(task)
 
-    return new_tasks
+    if not found_name:
+        raise TaskDoesntExistException
 
+    return new_tasks
